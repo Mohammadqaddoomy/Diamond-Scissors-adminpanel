@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diamond Scissors Admin Panel</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="../styles.css">
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-analytics-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    
+    <!-- Authentication and Firebase Initialization -->
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyA1GQgD-4BX2fct6t-jQqGa38ynHRGFvz4",
+            authDomain: "modren-salon.firebaseapp.com",
+            projectId: "modren-salon",
+            storageBucket: "modren-salon.firebasestorage.app",
+            messagingSenderId: "57508234918",
+            appId: "1:57508234918:web:bc4489f3c5f25bb1985667",
+            measurementId: "G-CP9RKSQFG5"
+        };
+
+        // Initialize Firebase
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
+
+        // Check authentication state
+        firebase.auth().onAuthStateChanged(function(user) {
+            
+                console.log('User is logged in:', user.email);
+                // Initialize Firestore after authentication
+                window.db = firebase.firestore();
+                // Load bookings after db is initialized
+                loadAllBookings();
+            
+        });
+    </script>
+    
+    <script src="panel.js" defer></script>
+</head>
+<body class="bg-gray-100">
+    <header class="bg-black text-white shadow-lg">
+        <nav class="container mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="text-2xl font-bold">Diamond Scissors Admin</div>
+                <div class="flex space-x-4">
+                    <button id="todayBtn" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                        Today's Bookings
+                    </button>
+                    <button id="allBtn" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+                        All Bookings
+                    </button>
+                    <button id="logoutBtn" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+                        Logout
+                    </button>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container mx-auto px-6 py-8">
+        <div class="mb-8">
+            <h2 class="text-2xl font-bold mb-4">Filter Bookings</h2>
+            <div class="flex gap-4 mb-4">
+                <input type="date" id="filterDate" class="px-4 py-2 border rounded-lg">
+                <button id="filterBtn" class="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded">
+                    Filter by Date
+                </button>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-md p-6">
+            <h2 class="text-2xl font-bold mb-6" id="bookingsTitle">All Bookings</h2>
+            <div class="overflow-x-auto">
+                <table class="min-w-full table-auto">
+                    <thead>
+                        <tr class="bg-gray-100">
+                            <th class="px-6 py-3 text-left">Name</th>
+                            <th class="px-6 py-3 text-left">phone</th>
+                            <th class="px-6 py-3 text-left">date</th>
+                            <th class="px-6 py-3 text-left">time</th>
+                            <th class="px-6 py-3 text-left">Service</th>
+                            <th class="px-6 py-3 text-left">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="bookingsList">
+                        <!-- Bookings will be inserted here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+</body>
+</html>
